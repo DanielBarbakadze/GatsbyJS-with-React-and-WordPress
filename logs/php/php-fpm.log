@@ -16,3 +16,13 @@
 [26-Jan-2021 18:57:02] ERROR: FPM initialization failed
 [26-Jan-2021 18:57:03] ERROR: Another FPM instance seems to already listen on /home/nevermind/.config/Local/run/_esnNVct8/php/php-fpm.socket
 [26-Jan-2021 18:57:03] ERROR: FPM initialization failed
+[26-Jan-2021 21:20:07] NOTICE: fpm is running, pid 2461
+[26-Jan-2021 21:20:07] NOTICE: ready to handle connections
+[26-Jan-2021 21:20:30] ERROR: Another FPM instance seems to already listen on /home/nevermind/.config/Local/run/_esnNVct8/php/php-fpm.socket
+[26-Jan-2021 21:20:30] ERROR: FPM initialization failed
+[26-Jan-2021 21:20:30] ERROR: Another FPM instance seems to already listen on /home/nevermind/.config/Local/run/_esnNVct8/php/php-fpm.socket
+[26-Jan-2021 21:20:30] ERROR: FPM initialization failed
+[26-Jan-2021 21:20:31] ERROR: Another FPM instance seems to already listen on /home/nevermind/.config/Local/run/_esnNVct8/php/php-fpm.socket
+[26-Jan-2021 21:20:31] ERROR: FPM initialization failed
+[26-Jan-2021 21:20:31] ERROR: Another FPM instance seems to already listen on /home/nevermind/.config/Local/run/_esnNVct8/php/php-fpm.socket
+[26-Jan-2021 21:20:31] ERROR: FPM initialization failed
