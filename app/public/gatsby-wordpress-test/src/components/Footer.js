@@ -1,40 +1,48 @@
 import React from "react"
-import { StaticQuery, graphql, Link } from "gatsby"
+import {
+  Link,
+  // StaticQuery, graphql,
+} from "gatsby"
 
-const Header = () => (
-  <StaticQuery
-    query={graphql`
-      {
-        allWordpressWpApiMenusMenusItems(
-          filter: { name: { eq: "Footer Menu" } }
-        ) {
-          edges {
-            node {
-              items {
-                title
-                object_slug
-                object_id
-              }
-            }
-          }
-        }
-      }
-    `}
-    render={props => (
-      <div>
-        <p>
-          Made By ❤. Creator - <strong>Daniel</strong>
-        </p>
-        {props.allWordpressWpApiMenusMenusItems.edges[0].node.items.map(
-          item => (
-            <Link to={`/${item.object_slug}`} key={`menu-${item.object_id}`}>
-              {item.title}
-            </Link>
-          )
-        )}
-      </div>
-    )}
-  />
+const Footer = ({ footerMenuItems }) => (
+  <div>
+    {footerMenuItems.edges.map(item => (
+      <Link to={`${item.node.path}`} key={`menu-${item.node.id}`}>
+        {item.node.title}
+      </Link>
+    ))}
+  </div>
+  // <StaticQuery
+  //   query={graphql`
+  //     query($footerMenuObjectIds: [Int]) {
+  //       allWordpressPage(
+  //         filter: { wordpress_id: { in: $footerMenuObjectIds } }
+  //       ) {
+  //         edges {
+  //           node {
+  //             id
+  //             path
+  //             title
+  //             slug
+  //           }
+  //         }
+  //       }
+  //     }
+  //   `}
+  //   render={props => (
+  //     <div>
+  //       {console.log("footer", props)}
+  //       <p>
+  //         Made By ❤. Creator - <strong>Daniel</strong>
+  //       </p>
+  //       {props.allWordpressPage.edges.map(item => (
+  //         <Link to={`${item.node.path}`} key={`menu-${item.node.id}`}>
+  //           {item.node.title}
+  //         </Link>
+  //       ))}
+  //     </div>
+  //   )}
+  // />
 )
 
-export default Header
+export default Footer

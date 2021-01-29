@@ -2,12 +2,12 @@ import React from "react"
 import Header from "./Header"
 import Footer from "./Footer"
 
-const Layout = ({ children }) => {
+const Layout = ({ children, headerMenuItems, footerMenuItems }) => {
   return (
     <>
-      <Header />
+      <Header headerMenuItems={headerMenuItems || []} />
       {children}
-      <Footer />
+      <Footer footerMenuItems={footerMenuItems || []} />
     </>
   )
 }

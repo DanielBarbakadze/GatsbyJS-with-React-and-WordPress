@@ -1,6 +1,7 @@
 import React from "react"
 
 export default ({ pageContext }) => {
+  pageContext = pageContext.data
   return (
     <div>
       <h1>{pageContext.title}</h1>

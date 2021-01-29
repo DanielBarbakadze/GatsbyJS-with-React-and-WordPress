@@ -1,37 +1,44 @@
 import React from "react"
-import { StaticQuery, graphql, Link } from "gatsby"
+import {
+  Link,
+  // StaticQuery, graphql,
+} from "gatsby"
 
-const Header = () => (
-  <StaticQuery
-    query={graphql`
-      {
-        allWordpressWpApiMenusMenusItems(
-          filter: { name: { eq: "Header Menu" } }
-        ) {
-          edges {
-            node {
-              items {
-                title
-                object_slug
-                object_id
-              }
-            }
-          }
-        }
-      }
-    `}
-    render={props => (
-      <div>
-        {props.allWordpressWpApiMenusMenusItems.edges[0].node.items.map(
-          item => (
-            <Link to={`/${item.object_slug}`} key={`menu-${item.object_id}`}>
-              {item.title}
-            </Link>
-          )
-        )}
-      </div>
-    )}
-  />
+const Header = ({ headerMenuItems }) => (
+  <div>
+    {headerMenuItems.edges.map(item => (
+      <Link to={`${item.node.path}`} key={`menu-${item.node.id}`}>
+        {item.node.title}
+      </Link>
+    ))}
+  </div>
+  // <StaticQuery
+  //   query={graphql`
+  //     query($headerMenuObjectIds: [Int]) {
+  //       allWordpressPage(
+  //         filter: { wordpress_id: { in: $headerMenuObjectIds } }
+  //       ) {
+  //         edges {
+  //           node {
+  //             id
+  //             path
+  //             title
+  //             slug
+  //           }
+  //         }
+  //       }
+  //     }
+  //   `}
+  //   render={props => (
+  //     <div>
+  //       {props.allWordpressPage.edges.map(item => (
+  //         <Link to={`${item.node.path}`} key={`menu-${item.node.id}`}>
+  //           {item.node.title}
+  //         </Link>
+  //       ))}
+  //     </div>
+  //   )}
+  // />
 )
 
 export default Header

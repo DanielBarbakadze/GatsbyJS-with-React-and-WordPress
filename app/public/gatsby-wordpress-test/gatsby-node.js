@@ -1,12 +1,16 @@
 const path = require(`path`)
 const { slash } = require(`gatsby-core-utils`)
 
-// Implement the Gatsby API “createPages”. This is
-// called after the Gatsby bootstrap is finished so you have
-// access to any information necessary to programmatically
-// create pages.
-// Will create pages for WordPress pages (route : /{slug})
-// Will create pages for WordPress posts (route : /post/{slug})
+const renderPageByTemplate = template => {
+  if (template.length < 0) {
+    return null
+  }
+  let page = template.slice(0, -4)
+  // console.log("template -", template)
+  pageTemplate = path.resolve(`./src/templates/${page}.js`)
+  return pageTemplate
+}
+
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage, createRedirect } = actions
 
@@ -16,10 +20,7 @@ exports.createPages = async ({ graphql, actions }) => {
     redirectInBrowser: true,
     isPermanent: true,
   })
-  // The “graphql” function allows us to run arbitrary
-  // queries against the local Gatsby GraphQL schema. Think of
-  // it like the site has a built-in database constructed
-  // from the fetched data that you can run queries against.
+
   const result = await graphql(`
     {
       allWordpressPage {
@@ -48,6 +49,71 @@ exports.createPages = async ({ graphql, actions }) => {
           }
         }
       }
+
+      footerMenuObjectIds: allWordpressWpApiMenusMenusItems(
+        filter: { name: { eq: "Footer Menu" } }
+      ) {
+        edges {
+          node {
+            items {
+              object_id
+            }
+          }
+        }
+      }
+
+      headerMenuObjectIds: allWordpressWpApiMenusMenusItems(
+        filter: { name: { eq: "Header Menu" } }
+      ) {
+        edges {
+          node {
+            items {
+              object_id
+            }
+          }
+        }
+      }
+
+      contactPage: allWordpressPage(
+        filter: { template: { eq: "contact.php" } }
+      ) {
+        edges {
+          node {
+            title
+            content
+            id
+            path
+            template
+            acf {
+              github
+            }
+          }
+        }
+      }
+
+      aboutPage: allWordpressPage(filter: { template: { eq: "about.php" } }) {
+        edges {
+          node {
+            title
+            content
+            id
+            path
+            template
+          }
+        }
+      }
+
+      homePage: allWordpressPage(filter: { template: { eq: "home.php" } }) {
+        edges {
+          node {
+            title
+            content
+            id
+            path
+            template
+          }
+        }
+      }
     }
   `)
 
@@ -57,39 +123,73 @@ exports.createPages = async ({ graphql, actions }) => {
   }
 
   // Access query results via object destructuring
-  const { allWordpressPage, allWordpressPost } = result.data
+  const {
+    allWordpressPage,
+    allWordpressPost,
+    contactPage,
+    aboutPage,
+    homePage,
+    footerMenuObjectIds,
+    headerMenuObjectIds,
+  } = result.data
 
-  // Create Page pages.
+  let footerMenuIds = JSON.stringify(
+    footerMenuObjectIds.edges[0].node.items.map(el => el.object_id)
+  )
+  let headerMenuIds = JSON.stringify(
+    headerMenuObjectIds.edges[0].node.items.map(el => el.object_id)
+  )
+
+  const menuItems = await graphql(`
+    {
+      headerMenuItems: allWordpressPage(filter: { wordpress_id: { in: ${headerMenuIds} } }) {
+        edges {
+          node {
+            id
+            path
+            title
+            slug
+          }
+        }
+      }
+      footerMenuItems: allWordpressPage(filter: { wordpress_id: { in: ${footerMenuIds} } }) {
+        edges {
+          node {
+            id
+            path
+            title
+            slug
+          }
+        }
+      }
+    }
+  `)
+
+  const { headerMenuItems, footerMenuItems } = menuItems.data
   const pageTemplate = path.resolve(`./src/templates/page.js`)
-  const customPage = path.resolve(`./src/templates/customPage.js`)
 
-  //   idk exactly how to manage this TODO:
-  //   const registeredPages = {
-  //       'custom-page': 'customPage.js'
-  //   }
-
-  // We want to create a detailed page for each page node.
-  // The path field contains the relative original WordPress link
-  // and we use it for the slug to preserve url structure.
-  // The Page ID is prefixed with 'PAGE_'
   allWordpressPage.edges.forEach(edge => {
-    console.log("--------------------")
-    console.log(edge.node.slug)
-    console.log("--------------------")
-    // Gatsby uses Redux to manage its internal state.
-    // Plugins and sites can use functions like "createPage"
-    // to interact with Gatsby.
-    createPage({
-      // Each page is required to have a `path` as well
-      // as a template component. The `context` is
-      // optional but is often necessary so the template
-      // can query data specific to each page.
-      path: edge.node.path,
-      component: slash(
-        edge.node.slug === "custom-page" ? customPage : pageTemplate
-      ),
-      context: edge.node,
-    })
+    if (edge.node.template === "") {
+      createPage({
+        // Each page is required to have a `path` as well as a template component.
+        // The `context` is optional but is often necessary so the template can query data specific to each page.
+        path: edge.node.path,
+        component: slash(
+          pageTemplate
+          // edge.node.template !== ""
+          // ? pageTemplate
+          // : renderPageByTemplate(edge.node.template)
+        ),
+        context: {
+          id: edge.node.id,
+          data: {
+            ...edge.node,
+            footerMenuItems: footerMenuItems,
+            headerMenuItems: headerMenuItems,
+          },
+        },
+      })
+    }
   })
 
   const postTemplate = path.resolve(`./src/templates/post.js`)
@@ -101,7 +201,60 @@ exports.createPages = async ({ graphql, actions }) => {
     createPage({
       path: edge.node.path,
       component: slash(postTemplate),
-      context: edge.node,
+      context: {
+        id: edge.node.id,
+        footerMenuObjectIds: [22, 23, 24],
+        headerMenuObjectIds: headerMenuIds,
+        data: edge.node,
+      },
+    })
+  })
+
+  // create pages seperately that needs different queries
+  contactPage.edges.forEach(edge => {
+    createPage({
+      path: edge.node.path,
+      component: slash(renderPageByTemplate(edge.node.template)),
+      context: {
+        id: edge.node.id,
+        data: {
+          ...edge.node,
+          footerMenuItems: footerMenuItems,
+          headerMenuItems: headerMenuItems,
+        },
+      },
+    })
+  })
+
+  // create pages seperately that needs different queries
+  aboutPage.edges.forEach(edge => {
+    createPage({
+      path: edge.node.path,
+      component: slash(renderPageByTemplate(edge.node.template)),
+      context: {
+        id: edge.node.id,
+        data: {
+          ...edge.node,
+          footerMenuItems: footerMenuItems,
+          headerMenuItems: headerMenuItems,
+        },
+      },
+    })
+  })
+
+  // create pages seperately that needs different queries
+  homePage.edges.forEach(edge => {
+    createPage({
+      path: edge.node.path,
+      component: slash(renderPageByTemplate(edge.node.template)),
+      context: {
+        id: edge.node.id,
+        data: {
+          ...edge.node,
+          footerMenuItems: footerMenuItems,
+          headerMenuItems: headerMenuItems,
+        },
+      },
     })
   })
 }
