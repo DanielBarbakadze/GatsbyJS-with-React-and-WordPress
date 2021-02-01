@@ -5,9 +5,9 @@ import Footer from "./Footer"
 const Layout = ({ children, headerMenuItems, footerMenuItems }) => {
   return (
     <>
-      <Header headerMenuItems={headerMenuItems || []} />
+      <Header headerMenuItems={headerMenuItems} />
       {children}
-      <Footer footerMenuItems={footerMenuItems || []} />
+      <Footer footerMenuItems={footerMenuItems} />
     </>
   )
 }

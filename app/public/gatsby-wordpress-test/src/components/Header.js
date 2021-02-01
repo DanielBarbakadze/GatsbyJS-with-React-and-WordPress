@@ -6,7 +6,7 @@ import {
 
 const Header = ({ headerMenuItems }) => (
   <div>
-    {headerMenuItems.edges.map(item => (
+    {headerMenuItems?.edges.map(item => (
       <Link to={`${item.node.path}`} key={`menu-${item.node.id}`}>
         {item.node.title}
       </Link>

@@ -6,7 +6,7 @@ import {
 
 const Footer = ({ footerMenuItems }) => (
   <div>
-    {footerMenuItems.edges.map(item => (
+    {footerMenuItems?.edges.map(item => (
       <Link to={`${item.node.path}`} key={`menu-${item.node.id}`}>
         {item.node.title}
       </Link>
