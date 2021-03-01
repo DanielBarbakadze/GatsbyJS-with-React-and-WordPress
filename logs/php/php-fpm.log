@@ -78,3 +78,14 @@
 [02-Feb-2021 09:41:17] NOTICE: Terminating ...
 [02-Feb-2021 21:35:05] NOTICE: fpm is running, pid 7671
 [02-Feb-2021 21:35:05] NOTICE: ready to handle connections
+[02-Feb-2021 21:41:15] ERROR: Another FPM instance seems to already listen on /home/nevermind/.config/Local/run/_esnNVct8/php/php-fpm.socket
+[02-Feb-2021 21:41:15] ERROR: FPM initialization failed
+[02-Feb-2021 21:41:15] ERROR: Another FPM instance seems to already listen on /home/nevermind/.config/Local/run/_esnNVct8/php/php-fpm.socket
+[02-Feb-2021 21:41:15] ERROR: FPM initialization failed
+[02-Feb-2021 21:41:16] ERROR: Another FPM instance seems to already listen on /home/nevermind/.config/Local/run/_esnNVct8/php/php-fpm.socket
+[02-Feb-2021 21:41:16] ERROR: FPM initialization failed
+[02-Feb-2021 21:41:16] ERROR: Another FPM instance seems to already listen on /home/nevermind/.config/Local/run/_esnNVct8/php/php-fpm.socket
+[02-Feb-2021 21:41:16] ERROR: FPM initialization failed
+[03-Feb-2021 03:06:42] NOTICE: Terminating ...
+[01-Mar-2021 17:37:02] NOTICE: fpm is running, pid 34911
+[01-Mar-2021 17:37:02] NOTICE: ready to handle connections
