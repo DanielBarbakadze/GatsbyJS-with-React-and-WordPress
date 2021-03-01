@@ -1,5 +1,5 @@
 require("dotenv").config({
-  path: `.env`,
+  path: ".env",
 })
 
 module.exports = {
@@ -9,7 +9,35 @@ module.exports = {
     author: `@tomphill`,
   },
   plugins: [
+    {
+      resolve: `gatsby-plugin-typegen`,
+      options: {
+        language: `flow`,
+        outputPath: `src/__generated__/gatsby-types.flow.js`,
+      },
+    },
+    `gatsby-plugin-typegen`,
     `gatsby-plugin-react-helmet`,
+    `gatsby-plugin-ts-config`,
+    {
+      resolve: `gatsby-plugin-typegen`,
+      options: {
+        emitSchema: {
+          "src/__generated__/gatsby-introspection.json": true,
+        },
+      },
+    },
+    {
+      resolve: `gatsby-plugin-typegen`,
+      options: {
+        emitSchema: {
+          "src/__generated__/gatsby-introspection.json": true,
+        },
+        emitPluginDocuments: {
+          "src/__generated__/gatsby-plugin-documents.graphql": true,
+        },
+      },
+    },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
